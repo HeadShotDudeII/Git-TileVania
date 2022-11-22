@@ -8,17 +8,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpSpeed = 10f;
     [SerializeField] float climbSpeed = 10f;
     float gravityScaleAtStart;
+    bool isAlive = true;
 
     Vector2 playerMovement;
     Rigidbody2D rigidBodyPlayer;
+    Vector2 deathKick = new Vector2(0, 20f);
 
-    //CapsuleCollider2D feetCollier;
+    CapsuleCollider2D bodyCapsuleCollier;
     BoxCollider2D feetCollier;
     Animator animatorPlayer;
     void Start()
     {
         rigidBodyPlayer = GetComponent<Rigidbody2D>();
         animatorPlayer = GetComponent<Animator>();
+        bodyCapsuleCollier = GetComponent<CapsuleCollider2D>();
         feetCollier = GetComponent<BoxCollider2D>();
         gravityScaleAtStart = rigidBodyPlayer.gravityScale;
     }
@@ -26,14 +29,28 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isAlive) return; // if dont add this line the dead body will die again.
         Run();
         FlipSprite();
         ClimbLadder();
+        Die();
+    }
+
+    private void Die()
+    {
+        if (bodyCapsuleCollier.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            Debug.Log("touched enemy");
+            isAlive = false;
+            animatorPlayer.SetTrigger("Die");
+            rigidBodyPlayer.velocity = deathKick;
+        }
+
     }
 
     private void ClimbLadder()
     {
-
+        if (!isAlive) return;
         if (!feetCollier.IsTouchingLayers(LayerMask.GetMask("Climbing")))
         {
             animatorPlayer.SetBool("isClimbing", false);
@@ -52,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FlipSprite()
     {
+        if (!isAlive) return;
+
         bool isRunning = Mathf.Abs(rigidBodyPlayer.velocity.x) > Mathf.Epsilon;
         if (isRunning)
         {
@@ -62,6 +81,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Run()
     {
+        if (!isAlive) return;
+
         rigidBodyPlayer.velocity = new Vector2(playerMovement.x * playerSpeed, rigidBodyPlayer.velocity.y);
         bool isRunning = Mathf.Abs(rigidBodyPlayer.velocity.x) > Mathf.Epsilon;
         animatorPlayer.SetBool("isRunning", isRunning);
@@ -70,6 +91,8 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump()
     {
+        if (!isAlive) return;
+
         if (!feetCollier.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
 
@@ -82,6 +105,8 @@ public class PlayerMovement : MonoBehaviour
 
     void OnMove(InputValue inptuValue)
     {
+        if (!isAlive) return;
+
         playerMovement = inptuValue.Get<Vector2>();
 
     }
