@@ -5,8 +5,14 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float playerSpeed = 10f;
-    [SerializeField] float jumpSpeed = 10f;
+    [SerializeField] float jumpSpeed = 30f;
     [SerializeField] float climbSpeed = 10f;
+    [SerializeField] Transform bulletPos;
+
+    // [SerializeField] float bulletSpeed = 10f;
+
+    [SerializeField] GameObject bullet;
+
     float gravityScaleAtStart;
     bool isAlive = true;
 
@@ -23,7 +29,9 @@ public class PlayerMovement : MonoBehaviour
         animatorPlayer = GetComponent<Animator>();
         bodyCapsuleCollier = GetComponent<CapsuleCollider2D>();
         feetCollier = GetComponent<BoxCollider2D>();
+
         gravityScaleAtStart = rigidBodyPlayer.gravityScale;
+
     }
 
     // Update is called once per frame
@@ -95,7 +103,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (!feetCollier.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
-
             return;
         }
         rigidBodyPlayer.velocity += new Vector2(0f, jumpSpeed);
@@ -103,11 +110,18 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void OnMove(InputValue inptuValue)
+    void OnMove(InputValue inputValue)
     {
         if (!isAlive) return;
 
-        playerMovement = inptuValue.Get<Vector2>();
+        playerMovement = inputValue.Get<Vector2>();
+
+    }
+
+    void OnFire()
+    {
+        GameObject bulletCopy = Instantiate(bullet, bulletPos.position, transform.rotation);
+        Debug.Log("Fired");
 
     }
 
