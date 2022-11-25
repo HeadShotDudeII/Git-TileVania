@@ -248,7 +248,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 10
-  jumpSpeed: 30
+  jumpSpeed: 20
   climbSpeed: 20
   bulletPos: {fileID: 7917299973337571851}
+  playerLifes: {fileID: 0}
   bullet: {fileID: 8992631359371165709, guid: ad59d6543f2828f4faa5c27a632c3236, type: 3}

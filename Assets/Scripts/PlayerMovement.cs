@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpSpeed = 30f;
     [SerializeField] float climbSpeed = 10f;
     [SerializeField] Transform bulletPos;
+    //[SerializeField] TextMeshProUGUI playerLifes;
 
     // [SerializeField] float bulletSpeed = 10f;
 
@@ -29,7 +30,6 @@ public class PlayerMovement : MonoBehaviour
         animatorPlayer = GetComponent<Animator>();
         bodyCapsuleCollier = GetComponent<CapsuleCollider2D>();
         feetCollier = GetComponent<BoxCollider2D>();
-
         gravityScaleAtStart = rigidBodyPlayer.gravityScale;
 
     }
@@ -44,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
         Die();
     }
 
+
+
     private void Die()
     {
         if (bodyCapsuleCollier.IsTouchingLayers(LayerMask.GetMask("Enemy")))
@@ -52,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
             isAlive = false;
             animatorPlayer.SetTrigger("Die");
             rigidBodyPlayer.velocity = deathKick;
+            FindObjectOfType<GameSession>().ProcessPlayerDeath();
         }
 
     }

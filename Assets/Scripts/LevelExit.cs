@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 public class LevelExit : MonoBehaviour
 {
     [SerializeField] float loadLevelDelay = 1f;
+    GameSession gameSession;
+
+    private void Start()
+    {
+        gameSession = FindObjectOfType<GameSession>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,6 +31,8 @@ public class LevelExit : MonoBehaviour
             nextlevelNumber = 0;
         }
         SceneManager.LoadScene(nextlevelNumber);
+        Debug.Log("After exit Life is " + gameSession.GetLifes());
+        Debug.Log("After exit Score is " + gameSession.GetScore());
 
 
     }
