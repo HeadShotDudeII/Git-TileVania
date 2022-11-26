@@ -30,6 +30,7 @@ public class LevelExit : MonoBehaviour
         {
             nextlevelNumber = 0;
         }
+        FindObjectOfType<ScenePersist>().ResetScene();
         SceneManager.LoadScene(nextlevelNumber);
         Debug.Log("After exit Life is " + gameSession.GetLifes());
         Debug.Log("After exit Score is " + gameSession.GetScore());

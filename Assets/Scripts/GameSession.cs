@@ -88,8 +88,10 @@ public class GameSession : MonoBehaviour
 
     private void ResetGameSession()
     {
-        SceneManager.LoadScene(0);
+        FindObjectOfType<ScenePersist>().ResetScene();
+        SceneManager.LoadScene(0); //load scene first then destroy self.
         Destroy(gameObject);
+
     }
 
     private void TakeLife()
